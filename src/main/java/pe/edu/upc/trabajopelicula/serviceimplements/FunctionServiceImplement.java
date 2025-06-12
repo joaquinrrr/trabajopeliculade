@@ -1,7 +1,10 @@
 package pe.edu.upc.trabajopelicula.serviceimplements;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.trabajopelicula.entities.Functions;
+import pe.edu.upc.trabajopelicula.repositories.ICinemaRepository;
+import pe.edu.upc.trabajopelicula.repositories.IFunctionsRepository;
 import pe.edu.upc.trabajopelicula.serviceinterfaces.ICinemaInterface;
 import pe.edu.upc.trabajopelicula.serviceinterfaces.IFunctionsInterface;
 
@@ -9,28 +12,31 @@ import java.util.List;
 
 @Service
 public class FunctionServiceImplement implements IFunctionsInterface {
+    @Autowired
+    private IFunctionsRepository fR;
+
     @Override
     public void insert(Functions functions) {
-
+        fR.save(functions);
     }
 
     @Override
     public List<Functions> list() {
-        return List.of();
+        return fR.findAll();
     }
 
     @Override
     public void delete(int id) {
-
+        fR.deleteById(id);
     }
 
     @Override
     public void update(Functions functions) {
-
+        fR.save(functions);
     }
 
     @Override
     public Functions listarId(int id) {
-        return null;
+        return fR.findById(id).orElse(new Functions());
     }
 }

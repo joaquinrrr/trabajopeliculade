@@ -1,41 +1,47 @@
 package pe.edu.upc.trabajopelicula.serviceimplements;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pe.edu.upc.trabajopelicula.dtos.TicketDTO;
 import pe.edu.upc.trabajopelicula.entities.Ticket;
+import pe.edu.upc.trabajopelicula.repositories.ITicketRepository;
 import pe.edu.upc.trabajopelicula.serviceinterfaces.ITicketInterface;
 
 import java.util.List;
 
 @Service
 public class TicketServiceImplement implements ITicketInterface {
+
+    @Autowired
+    private ITicketRepository tR;
+
     @Override
-    public Ticket insert(Ticket tickets) {
-        return null;
+    public void insert(Ticket ticket) {
+        tR.save(ticket);
     }
 
     @Override
     public List<Ticket> list() {
-        return List.of();
+        return tR.findAll();
     }
 
     @Override
     public void delete(int id) {
-
+        tR.deleteById(id);
     }
 
     @Override
     public void update(Ticket tickets) {
-
+        tR.save(tickets);
     }
 
-    @Override
+    /*@Override
     public TicketDTO getTicketById(Integer id) {
-        return null;
-    }
+        return tR;
+    }*/
 
     @Override
     public Ticket listarId(int id) {
-        return null;
+        return tR.findById(id).orElse(new Ticket());
     }
 }

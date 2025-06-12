@@ -2,7 +2,7 @@ package pe.edu.upc.trabajopelicula.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
-import pe.edu.upc.calpabackend.entities.Roles;
+import pe.edu.upc.trabajopelicula.entities.Roles;
 
 import java.util.List;
 

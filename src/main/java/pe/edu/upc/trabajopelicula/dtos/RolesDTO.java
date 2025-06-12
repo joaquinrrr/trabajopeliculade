@@ -2,7 +2,7 @@ package pe.edu.upc.trabajopelicula.dtos;
 
 import lombok.Getter;
 import lombok.Setter;
-import pe.edu.upc.calpabackend.entities.Users;
+import pe.edu.upc.trabajopelicula.entities.Users;
 
 @Getter
 @Setter
