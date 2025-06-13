@@ -30,4 +30,6 @@ public class Movies {
     private String director;
     @Column(name = "description", nullable = false, length = 254)
     private String description;
+    @Column(name = "urlimage", nullable = false, length = 254)
+    private String urlimage;
 }

@@ -14,4 +14,5 @@ public class MoviesDTO {
     private String yearold;
     private String director;
     private String description;
+    private String urlimage;
 }
