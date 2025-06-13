@@ -20,14 +20,15 @@ public class UsersController {
     @Autowired
     private IUserInterface userInterface;
 
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @PostMapping("/Registro")
     public ResponseEntity<UsersDTO> registrar(@RequestBody UsersDTO userDTO) {
         ModelMapper m = new ModelMapper();
         Users us = m.map(userDTO, Users.class);
-        //String encodedPassword = passwordEncoder.encode(us.getPassword());
-        //us.setPassword(encodedPassword);
+        String encodedPassword = passwordEncoder.encode(us.getPassword());
+        us.setPassword(encodedPassword);
         Users newUser = userInterface.insert(us);
         UsersDTO userResponse = m.map(newUser, UsersDTO.class);
         return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
