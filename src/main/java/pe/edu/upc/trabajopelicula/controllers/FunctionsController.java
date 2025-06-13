@@ -2,6 +2,7 @@ package pe.edu.upc.trabajopelicula.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.trabajopelicula.dtos.FunctionsDTO;
 import pe.edu.upc.trabajopelicula.entities.Functions;
@@ -33,6 +34,7 @@ public class FunctionsController {
     }
 
     @PutMapping("/{id}") // actualizar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void actualizar(@PathVariable("id") Integer id, @RequestBody FunctionsDTO a) {
         ModelMapper m = new ModelMapper();
         Functions ah = m.map(a, Functions.class);
@@ -41,6 +43,7 @@ public class FunctionsController {
     }
 
     @DeleteMapping("/{id}") //reconozca parametros que estamos pasando
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void eliminar(@PathVariable("id") Integer id){
         functionsInterface.delete(id);
     }

@@ -1,6 +1,7 @@
 package pe.edu.upc.trabajopelicula.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.trabajopelicula.dtos.RolesDTO;
 import pe.edu.upc.trabajopelicula.entities.Roles;
@@ -18,6 +19,7 @@ public class RolesController {
     private IRoleInterface roleInterface;
 
     @PostMapping("/Registro") //registrar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void registrar(@RequestBody RolesDTO s){
         ModelMapper m = new ModelMapper();
         Roles sh=m.map(s, Roles.class);
@@ -25,6 +27,7 @@ public class RolesController {
     }
 
     @GetMapping //listar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public List<RolesDTO> list(){
         return roleInterface.list().stream().map(y->{
             ModelMapper m = new ModelMapper();
@@ -33,6 +36,7 @@ public class RolesController {
     }
 
     @PutMapping("/{id}") // actualizar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void actualizar(@PathVariable("id") Long id, @RequestBody RolesDTO re){
         ModelMapper m = new ModelMapper();
         Roles rh = m.map(re, Roles.class);
@@ -41,11 +45,13 @@ public class RolesController {
     }
 
     @DeleteMapping("/{id}") //reconozca parametros que estamos pasando
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void eliminar(@PathVariable("id") Long id){
         roleInterface.delete(id);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public RolesDTO listarId(@PathVariable("id") Long id) {
         ModelMapper m = new ModelMapper();
         RolesDTO dto = m.map(roleInterface.listarId(id), RolesDTO.class);

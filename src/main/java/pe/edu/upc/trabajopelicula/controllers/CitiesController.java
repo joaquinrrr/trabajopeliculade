@@ -2,6 +2,7 @@ package pe.edu.upc.trabajopelicula.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.trabajopelicula.dtos.CitiesDTO;
 import pe.edu.upc.trabajopelicula.entities.Cities;
@@ -18,6 +19,7 @@ public class CitiesController {
     private ICitiesInterface citiesInterface;
 
     @PostMapping("/Registro") //registrar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void registrar(@RequestBody CitiesDTO a) {
         ModelMapper m = new ModelMapper();
         Cities ch = m.map(a, Cities.class);
@@ -33,6 +35,7 @@ public class CitiesController {
     }
 
     @PutMapping("/{id}") // actualizar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void actualizar(@PathVariable("id") Integer id, @RequestBody CitiesDTO a) {
         ModelMapper m = new ModelMapper();
         Cities ah = m.map(a, Cities.class);
@@ -41,6 +44,7 @@ public class CitiesController {
     }
 
     @DeleteMapping("/{id}") //reconozca parametros que estamos pasando
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void eliminar(@PathVariable("id") Integer id){
         citiesInterface.delete(id);
     }

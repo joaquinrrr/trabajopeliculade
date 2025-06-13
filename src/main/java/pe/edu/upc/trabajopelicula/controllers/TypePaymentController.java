@@ -2,6 +2,7 @@ package pe.edu.upc.trabajopelicula.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.trabajopelicula.dtos.TypePaymentsDTO;
 import pe.edu.upc.trabajopelicula.entities.TypePayments;
@@ -17,6 +18,7 @@ public class TypePaymentController {
     private ITypePaymentsInterface typePaymentsInterface;
 
     @PostMapping("/Registro") //registrar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void registrar(@RequestBody TypePaymentsDTO a) {
         ModelMapper m = new ModelMapper();
         TypePayments ch = m.map(a, TypePayments.class);
@@ -32,6 +34,7 @@ public class TypePaymentController {
     }
 
     @PutMapping("/{id}") // actualizar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void actualizar(@PathVariable("id") Integer id, @RequestBody TypePaymentsDTO a) {
         ModelMapper m = new ModelMapper();
         TypePayments ah = m.map(a, TypePayments.class);
@@ -40,6 +43,7 @@ public class TypePaymentController {
     }
 
     @DeleteMapping("/{id}") //reconozca parametros que estamos pasando
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void eliminar(@PathVariable("id") Integer id){
         typePaymentsInterface.delete(id);
     }

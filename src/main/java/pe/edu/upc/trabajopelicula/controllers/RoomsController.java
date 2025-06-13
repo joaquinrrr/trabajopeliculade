@@ -2,6 +2,7 @@ package pe.edu.upc.trabajopelicula.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.trabajopelicula.dtos.RoomsDTO;
 import pe.edu.upc.trabajopelicula.entities.Rooms;
@@ -17,6 +18,7 @@ public class RoomsController {
     private IRoomsInterface roomsInterface;
 
     @PostMapping("/Registro") //registrar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void registrar(@RequestBody RoomsDTO a) {
         ModelMapper m = new ModelMapper();
         Rooms ch = m.map(a, Rooms.class);
@@ -32,6 +34,7 @@ public class RoomsController {
     }
 
     @PutMapping("/{id}") // actualizar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void actualizar(@PathVariable("id") Integer id, @RequestBody RoomsDTO a) {
         ModelMapper m = new ModelMapper();
         Rooms ah = m.map(a, Rooms.class);
@@ -40,6 +43,7 @@ public class RoomsController {
     }
 
     @DeleteMapping("/{id}") //reconozca parametros que estamos pasando
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void eliminar(@PathVariable("id") Integer id){
         roomsInterface.delete(id);
     }

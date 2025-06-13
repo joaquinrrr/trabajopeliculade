@@ -2,6 +2,7 @@ package pe.edu.upc.trabajopelicula.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.trabajopelicula.dtos.MoviesDTO;
 import pe.edu.upc.trabajopelicula.entities.Movies;
@@ -17,6 +18,7 @@ public class MoviesController {
     private IMoviesInterface moviesInterface;
 
     @PostMapping("/Registro") //registrar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void registrar(@RequestBody MoviesDTO a) {
         ModelMapper m = new ModelMapper();
         Movies ch = m.map(a, Movies.class);
@@ -32,6 +34,7 @@ public class MoviesController {
     }
 
     @PutMapping("/{id}") // actualizar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void actualizar(@PathVariable("id") Integer id, @RequestBody MoviesDTO a) {
         ModelMapper m = new ModelMapper();
         Movies ah = m.map(a, Movies.class);
@@ -40,6 +43,7 @@ public class MoviesController {
     }
 
     @DeleteMapping("/{id}") //reconozca parametros que estamos pasando
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void eliminar(@PathVariable("id") Integer id){
         moviesInterface.delete(id);
     }

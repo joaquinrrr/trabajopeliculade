@@ -2,6 +2,7 @@ package pe.edu.upc.trabajopelicula.controllers;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.trabajopelicula.dtos.CinemaRoomsDTO;
 import pe.edu.upc.trabajopelicula.entities.CinemaRooms;
@@ -19,6 +20,7 @@ public class CinemaRoomsController {
     private ICinemaRoomsInterface cinemaRoomsInterface;
 
     @PostMapping("/insert") //registrar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void registrar(@RequestBody CinemaRoomsDTO a) {
         ModelMapper m = new ModelMapper();
         CinemaRooms ch = m.map(a, CinemaRooms.class);
@@ -34,6 +36,7 @@ public class CinemaRoomsController {
     }
 
     @PutMapping("/{id}") // actualizar
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void actualizar(@PathVariable("id") Integer id, @RequestBody CinemaRoomsDTO a) {
         ModelMapper m = new ModelMapper();
         CinemaRooms ah = m.map(a, CinemaRooms.class);
@@ -42,6 +45,7 @@ public class CinemaRoomsController {
     }
 
     @DeleteMapping("/{id}") //reconozca parametros que estamos pasando
+    @PreAuthorize("hasAnyAuthority('ADMIN') and !hasAnyAuthority('CLIENTE')") //manejar la auth de USER
     public void eliminar(@PathVariable("id") Integer id){
         cinemaRoomsInterface.delete(id);
     }
