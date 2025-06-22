@@ -13,6 +13,5 @@ public class CinemaDTO {
     private int id;
     private String localname;
     private String urlimage;
-
     private Cities cities;
 }
