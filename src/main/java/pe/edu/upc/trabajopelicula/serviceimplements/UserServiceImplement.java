@@ -69,4 +69,9 @@ public class UserServiceImplement implements IUserInterface {
     public Users finduser(String username) {
         return uR.findByUsername(username);
     }
+
+    @Override
+    public List<Users> listByRole(String roleName) {
+        return uR.findByRoleName(roleName);
+    }
 }

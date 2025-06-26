@@ -10,5 +10,6 @@ public interface IUserInterface {
     public void delete(Long id);
     public void update(Users user);
     public Users listarId(Long id);
+    public List<Users> listByRole(String roleName);
     public Users finduser(String username);
 }

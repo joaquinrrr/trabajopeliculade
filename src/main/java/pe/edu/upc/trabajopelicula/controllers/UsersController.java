@@ -63,4 +63,19 @@ public class UsersController {
         return dto;
     }
 
+    @GetMapping("/role/{roleName}")
+    public List<UsersDTO> listByRole(@PathVariable("roleName") String roleName) {
+        return userInterface.listByRole(roleName).stream().map(y -> {
+            ModelMapper m = new ModelMapper();
+            return m.map(y, UsersDTO.class);
+        }).collect(Collectors.toList());
+    }
+
+    @GetMapping("/nombreusuario")
+    public UsersDTO encontraruser(@RequestParam String nombreuser){
+        ModelMapper m = new ModelMapper();
+        UsersDTO dto = m.map(userInterface.finduser(nombreuser), UsersDTO.class);
+        return dto;
+    }
+
 }
