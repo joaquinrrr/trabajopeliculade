@@ -1,12 +1,15 @@
 package pe.edu.upc.trabajopelicula.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.trabajopelicula.dtos.TicketDTO;
 import pe.edu.upc.trabajopelicula.entities.Ticket;
+import pe.edu.upc.trabajopelicula.serviceimplements.generatePDF;
 import pe.edu.upc.trabajopelicula.serviceinterfaces.ITicketInterface;
 
+import java.io.OutputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,5 +53,27 @@ public class TicketController {
         ModelMapper m = new ModelMapper();
         TicketDTO dto = m.map(ticketInterface.listarId(id), TicketDTO.class);
         return dto;
+    }
+
+    @GetMapping("/{id}/boleta")
+    public void generarBoleta(@PathVariable("id") int id, HttpServletResponse response) {
+        try {
+            Ticket ticket = ticketInterface.listarId(id);
+            if (ticket == null) {
+                response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+                return;
+            }
+
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "attachment; filename=boleta_" + id + ".pdf");
+
+            OutputStream out = response.getOutputStream();
+            generatePDF.PDFGenerator.generatePDF(ticket, out);
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        }
     }
 }
