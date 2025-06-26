@@ -1,11 +1,11 @@
 package pe.edu.upc.trabajopelicula.serviceimplements;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pe.edu.upc.trabajopelicula.entities.Roles;
 import pe.edu.upc.trabajopelicula.entities.Users;
-import pe.edu.upc.trabajopelicula.repositories.ICinemaRepository;
 import pe.edu.upc.trabajopelicula.repositories.IRoleRepository;
 import pe.edu.upc.trabajopelicula.repositories.IUserRepository;
 import pe.edu.upc.trabajopelicula.serviceinterfaces.IUserInterface;
@@ -14,6 +14,7 @@ import java.util.List;
 
 @Service
 public class UserServiceImplement implements IUserInterface {
+
     @Autowired
     private IUserRepository uR;
 
@@ -23,14 +24,17 @@ public class UserServiceImplement implements IUserInterface {
     @Override
     @Transactional
     public Users insert(Users user) {
-        // Guardar el usuario en la base de datos
+        // Guardar el usuario
         Users savedUser = uR.save(user);
 
-        // Crear el rol y asociarlo al usuario recién creado
-        Roles role = new Roles();
-        role.setRol("CINEFILO"); // Rol predeterminado
-        role.setUser(savedUser); // Asocia el usuario al rol
-        rR.save(role); // Guarda el rol en la base de datos
+        // Validar si ya tiene el rol "CLIENTE"
+        boolean yaTieneRol = rR.existsByUserAndRol(savedUser, "CLIENTE");
+        if (!yaTieneRol) {
+            Roles role = new Roles();
+            role.setRol("CLIENTE");
+            role.setUser(savedUser);
+            rR.save(role);
+        }
 
         return savedUser;
     }
@@ -43,13 +47,10 @@ public class UserServiceImplement implements IUserInterface {
     @Override
     @Transactional
     public void delete(Long id) {
-        // Eliminar los roles asociados al usuario
-        List<Roles> roles = rR.findByUserId(id); // Suponiendo que hay un método en el repositorio para encontrar roles por usuario
+        List<Roles> roles = rR.findByUserId(id);
         if (!roles.isEmpty()) {
-            rR.deleteAll(roles); // Elimina todos los roles asociados
+            rR.deleteAll(roles);
         }
-
-        // Eliminar el usuario
         uR.deleteById(id);
     }
 
@@ -60,7 +61,8 @@ public class UserServiceImplement implements IUserInterface {
 
     @Override
     public Users listarId(Long id) {
-        return uR.findById(id).orElse(new Users());
+        return uR.findById(id).orElseThrow(() ->
+                new EntityNotFoundException("Usuario no encontrado con ID: " + id));
     }
 
     @Override

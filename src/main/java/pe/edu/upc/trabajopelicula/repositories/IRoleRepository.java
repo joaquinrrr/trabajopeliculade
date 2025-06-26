@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface IRoleRepository extends JpaRepository<Roles,Long> {
     List<Roles> findByUserId(Long userId);
+    boolean existsByUserAndRol(pe.edu.upc.trabajopelicula.entities.Users user, String rol);
+
 }
