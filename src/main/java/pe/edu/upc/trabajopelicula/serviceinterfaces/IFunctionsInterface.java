@@ -11,4 +11,8 @@ public interface IFunctionsInterface {
     public void delete(int id);
     public void update(Functions functions);
     public Functions listarId(int id);
+
+    public List<String[]> countFunctionsByUser();
+    public List<String[]> countTicketsByCinema();
+    public List<String[]> countFunctionsByUserAndDate(String username);
 }

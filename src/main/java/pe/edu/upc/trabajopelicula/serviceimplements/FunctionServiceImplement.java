@@ -40,5 +40,20 @@ public class FunctionServiceImplement implements IFunctionsInterface {
         return fR.findById(id).orElse(new Functions());
     }
 
+    @Override
+    public List<String[]> countFunctionsByUser() {
+        return fR.countFunctionsByUser();
+    }
+
+    @Override
+    public List<String[]> countTicketsByCinema() {
+        return fR.countTicketsByCinema();
+    }
+
+    @Override
+    public List<String[]> countFunctionsByUserAndDate(String username) {
+        return fR.countFunctionsByUserAndDate(username);
+    }
+
 
 }

@@ -11,4 +11,8 @@ public interface IMovieCinemaInterface {
     public void delete(int id);
     public void update(MovieCinema movieCinema);
     public MovieCinema listarId(int id);
+
+    public List<String[]> countFunctionsByCinema();
+    public List<String[]> countMoviesByCity();
+    public List<String[]> findMovieSchedulesByCinema(String cinemaName);
 }

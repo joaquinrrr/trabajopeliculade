@@ -38,4 +38,9 @@ public class ReviewServiceImplement implements IReviewInterface {
     public Review listarId(int id) {
         return rR.findById(id).orElse(new Review());
     }
+
+    @Override
+    public List<String[]> getMovieReviewStats(String movieName) {
+        return rR.getMovieReviewStats(movieName);
+    }
 }

@@ -11,4 +11,7 @@ public interface IReviewInterface {
     public void delete(int id);
     public void update(Review review);
     public Review listarId(int id);
+
+    public List<String[]> getMovieReviewStats(String movieName);
+
 }

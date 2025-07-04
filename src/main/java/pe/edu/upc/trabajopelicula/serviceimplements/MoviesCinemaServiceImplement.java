@@ -38,4 +38,19 @@ public class MoviesCinemaServiceImplement implements IMovieCinemaInterface {
     public MovieCinema listarId(int id) {
         return mcR.findById(id).orElse(new MovieCinema());
     }
+
+    @Override
+    public List<String[]> countFunctionsByCinema() {
+        return mcR.countFunctionsByCinema();
+    }
+
+    @Override
+    public List<String[]> countMoviesByCity() {
+        return mcR.countMoviesByCity();
+    }
+
+    @Override
+    public List<String[]> findMovieSchedulesByCinema(String cinemaName) {
+        return mcR.findMovieSchedulesByCinema(cinemaName);
+    }
 }

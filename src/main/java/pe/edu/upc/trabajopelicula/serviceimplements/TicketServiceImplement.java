@@ -7,6 +7,7 @@ import pe.edu.upc.trabajopelicula.entities.Ticket;
 import pe.edu.upc.trabajopelicula.repositories.ITicketRepository;
 import pe.edu.upc.trabajopelicula.serviceinterfaces.ITicketInterface;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -43,5 +44,20 @@ public class TicketServiceImplement implements ITicketInterface {
     @Override
     public Ticket listarId(int id) {
         return tR.findById(id).orElse(new Ticket());
+    }
+
+    @Override
+    public List<String[]> totalRevenueByPaymentType() {
+        return tR.totalRevenueByPaymentType();
+    }
+
+    @Override
+    public List<String[]> findTicketsByUsername(String username) {
+        return tR.findTicketsByUsername(username);
+    }
+
+    @Override
+    public List<String[]> totalRevenueByPaymentTypeAndDate(LocalDate start, LocalDate end) {
+        return tR.totalRevenueByPaymentTypeAndDate(start, end);
     }
 }
