@@ -4,10 +4,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.trabajopelicula.dtos.FindMovieScheduleDTO;
 import pe.edu.upc.trabajopelicula.dtos.MovieCinemaDTO;
+import pe.edu.upc.trabajopelicula.dtos.QuantityFunctionsCinemaDTO;
+import pe.edu.upc.trabajopelicula.dtos.QuantityMoviesCityDTO;
 import pe.edu.upc.trabajopelicula.entities.MovieCinema;
 import pe.edu.upc.trabajopelicula.serviceinterfaces.IMovieCinemaInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,4 +60,49 @@ public class MovieCinemaController {
         MovieCinemaDTO dto = m.map(movieCinemaInterface.listarId(id), MovieCinemaDTO.class);
         return dto;
     }
+
+    @GetMapping("/cantidadFuncionesCine")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<QuantityFunctionsCinemaDTO> cantidadFuncionesCine() {
+        List<String[]> rawList = movieCinemaInterface.countFunctionsByCinema();
+        List<QuantityFunctionsCinemaDTO> result = new ArrayList<>();
+        for (String[] row : rawList) {
+            QuantityFunctionsCinemaDTO dto = new QuantityFunctionsCinemaDTO();
+            dto.setCinema(row[0]);
+            dto.setQuantity(Integer.parseInt(row[1]));
+            result.add(dto);
+        }
+        return result;
+    }
+
+    @GetMapping("/cantidadPeliculasCiudad")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<QuantityMoviesCityDTO> cantidadPeliculasCiudad() {
+        List<String[]> rawList = movieCinemaInterface.countMoviesByCity();
+        List<QuantityMoviesCityDTO> result = new ArrayList<>();
+        for (String[] row : rawList) {
+            QuantityMoviesCityDTO dto = new QuantityMoviesCityDTO();
+            dto.setCity(row[0]);
+            dto.setQuantity(Integer.parseInt(row[1]));
+            result.add(dto);
+        }
+        return result;
+    }
+
+    @GetMapping("/funcionesPorCine")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<FindMovieScheduleDTO> funcionesPorCine(@RequestParam("cinema") String cinema) {
+        List<String[]> rawList = movieCinemaInterface.findMovieSchedulesByCinema(cinema);
+        List<FindMovieScheduleDTO> result = new ArrayList<>();
+        for (String[] row : rawList) {
+            FindMovieScheduleDTO dto = new FindMovieScheduleDTO();
+            dto.setMovie(row[0]);
+            dto.setCinema(row[1]);
+            dto.setStartHour(row[2]);
+            dto.setEndHour(row[3]);
+            result.add(dto);
+        }
+        return result;
+    }
+
 }

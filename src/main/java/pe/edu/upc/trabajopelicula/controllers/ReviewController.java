@@ -3,10 +3,12 @@ package pe.edu.upc.trabajopelicula.controllers;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pe.edu.upc.trabajopelicula.dtos.GetMovieReviewDTO;
 import pe.edu.upc.trabajopelicula.dtos.ReviewDTO;
 import pe.edu.upc.trabajopelicula.entities.Review;
 import pe.edu.upc.trabajopelicula.serviceinterfaces.IReviewInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,4 +53,19 @@ public class ReviewController {
         ReviewDTO dto = m.map(reviewInterface.listarId(id), ReviewDTO.class);
         return dto;
     }
+
+    @GetMapping("/estadisticasResenas")
+    public List<GetMovieReviewDTO> estadisticasResenas(@RequestParam("movie") String movie) {
+        List<String[]> rawList = reviewInterface.getMovieReviewStats(movie);
+        List<GetMovieReviewDTO> result = new ArrayList<>();
+        for (String[] row : rawList) {
+            GetMovieReviewDTO dto = new GetMovieReviewDTO();
+            dto.setMovie(row[0]);
+            dto.setTotalReviews(Integer.parseInt(row[1]));
+            dto.setAverageRating(Double.parseDouble(row[2]));
+            result.add(dto);
+        }
+        return result;
+    }
+
 }

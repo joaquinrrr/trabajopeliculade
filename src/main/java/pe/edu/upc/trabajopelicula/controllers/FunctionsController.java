@@ -5,9 +5,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pe.edu.upc.trabajopelicula.dtos.FunctionsDTO;
+import pe.edu.upc.trabajopelicula.dtos.QuantityFunctionsUserDateDTO;
+import pe.edu.upc.trabajopelicula.dtos.QuantityFunctionsUsersDTO;
+import pe.edu.upc.trabajopelicula.dtos.QuantityTicketsCinemaDTO;
 import pe.edu.upc.trabajopelicula.entities.Functions;
 import pe.edu.upc.trabajopelicula.serviceinterfaces.IFunctionsInterface;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,4 +60,46 @@ public class FunctionsController {
         return dto;
     }
 
+    @GetMapping("/cantidadFuncionesUsuario")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<QuantityFunctionsUsersDTO> cantidadFuncionesUsuario() {
+        List<String[]> rawList = functionsInterface.countFunctionsByUser();
+        List<QuantityFunctionsUsersDTO> result = new ArrayList<>();
+        for (String[] row : rawList) {
+            QuantityFunctionsUsersDTO dto = new QuantityFunctionsUsersDTO();
+            dto.setUsername(row[0]);
+            dto.setQuantity(Integer.parseInt(row[1]));
+            result.add(dto);
+        }
+        return result;
+    }
+
+    @GetMapping("/ticketsVendidosPorCine")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<QuantityTicketsCinemaDTO> ticketsPorCine() {
+        List<String[]> rawList = functionsInterface.countTicketsByCinema();
+        List<QuantityTicketsCinemaDTO> result = new ArrayList<>();
+        for (String[] row : rawList) {
+            QuantityTicketsCinemaDTO dto = new QuantityTicketsCinemaDTO();
+            dto.setCinema(row[0]);
+            dto.setQuantity(Integer.parseInt(row[1]));
+            result.add(dto);
+        }
+        return result;
+    }
+
+    @GetMapping("/funcionesPorUsuarioFecha")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<QuantityFunctionsUserDateDTO> funcionesPorUsuarioFecha(@RequestParam("username") String username) {
+        List<String[]> rawList = functionsInterface.countFunctionsByUserAndDate(username);
+        List<QuantityFunctionsUserDateDTO> result = new ArrayList<>();
+        for (String[] row : rawList) {
+            QuantityFunctionsUserDateDTO dto = new QuantityFunctionsUserDateDTO();
+            dto.setUsername(row[0]);
+            dto.setQuantity(Integer.parseInt(row[1]));
+            dto.setDate(row[2]);
+            result.add(dto);
+        }
+        return result;
+    }
 }
