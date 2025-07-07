@@ -1,5 +1,6 @@
 package pe.edu.upc.trabajopelicula.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
